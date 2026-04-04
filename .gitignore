@@ -19,3 +19,9 @@ services/reports-django/venv/
 services/reports-django/.env
 services/reports-django/__pycache__/
 services/reports-django/*.pyc
+
+# Flask store service
+services/coverage-flask/venv/
+services/coverage-flask/.env
+services/coverage-flask/__pycache__/
+services/coverage-flask/*.pyc
