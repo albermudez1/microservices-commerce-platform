@@ -13,3 +13,9 @@ services/recommendations-django/venv/
 services/recommendations-django/.env
 services/recommendations-django/__pycache__/
 services/recommendations-django/*.pyc
+
+# Django reports service
+services/reports-django/venv/
+services/reports-django/.env
+services/reports-django/__pycache__/
+services/reports-django/*.pyc
