@@ -7,3 +7,9 @@ services/catalog-inventory-flask/*.pyc
 # Node - Express sales service
 services/orders-sales-express/node_modules/
 services/orders-sales-express/.env
+
+# Django recommendations service
+services/recommendations-django/venv/
+services/recommendations-django/.env
+services/recommendations-django/__pycache__/
+services/recommendations-django/*.pyc
