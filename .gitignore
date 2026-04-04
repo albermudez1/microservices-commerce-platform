@@ -1,0 +1,5 @@
+# Flask catalog-inventory service
+services/catalog-inventory-flask/venv/
+services/catalog-inventory-flask/.env
+services/catalog-inventory-flask/__pycache__/
+services/catalog-inventory-flask/*.pyc
