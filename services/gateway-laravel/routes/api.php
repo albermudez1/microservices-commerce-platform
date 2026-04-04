@@ -30,5 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/sales', [SalesGatewayController::class, 'store']);
     Route::get('/sales/user/{userId}', [SalesGatewayController::class, 'byUser']);
     Route::get('/sales/date-range/search', [SalesGatewayController::class, 'byDateRange']);
+    Route::post('/sales/process', [SalesGatewayController::class, 'process']);
 
 });
