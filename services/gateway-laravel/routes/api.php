@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Services\ProductGatewayController;
+use App\Http\Controllers\Services\SalesGatewayController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -22,4 +23,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/products/{id}/stock', [ProductGatewayController::class, 'stock']);
     Route::patch('/products/{id}/stock/decrease', [ProductGatewayController::class, 'decreaseStock']);
     Route::patch('/products/{id}/stock/increase', [ProductGatewayController::class, 'increaseStock']);
+
+    # Sale routes
+    Route::get('/sales', [SalesGatewayController::class, 'index']);
+    Route::get('/sales/{id}', [SalesGatewayController::class, 'show']);
+    Route::post('/sales', [SalesGatewayController::class, 'store']);
+    Route::get('/sales/user/{userId}', [SalesGatewayController::class, 'byUser']);
+    Route::get('/sales/date-range/search', [SalesGatewayController::class, 'byDateRange']);
+
 });
