@@ -3,3 +3,7 @@ services/catalog-inventory-flask/venv/
 services/catalog-inventory-flask/.env
 services/catalog-inventory-flask/__pycache__/
 services/catalog-inventory-flask/*.pyc
+
+# Node - Express sales service
+services/orders-sales-express/node_modules/
+services/orders-sales-express/.env
