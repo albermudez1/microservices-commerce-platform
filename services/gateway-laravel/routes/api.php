@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Services\ProductGatewayController;
 use App\Http\Controllers\Services\SalesGatewayController;
+use App\Http\Controllers\Services\RecommendationGatewayController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -31,5 +32,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/sales/user/{userId}', [SalesGatewayController::class, 'byUser']);
     Route::get('/sales/date-range/search', [SalesGatewayController::class, 'byDateRange']);
     Route::post('/sales/process', [SalesGatewayController::class, 'process']);
+
+    # Recommendation routes
+    Route::get('/recommendations/top-selling', [RecommendationGatewayController::class, 'topSelling']);
+    Route::get('/recommendations/user', [RecommendationGatewayController::class, 'userRecommendations']);
+    Route::get('/recommendations/price-max', [RecommendationGatewayController::class, 'priceMax']);
 
 });
