@@ -37,16 +37,16 @@ def total_sales_report(request):
 
     for sale in sales:
         quantity = sale.get('quantity', 0)
-        price = sale.get('price', 0)
+        total_price = sale.get('totalPrice')
 
         if not isinstance(quantity, int) or quantity <= 0:
             continue
 
-        if not isinstance(price, (int, float)) or price < 0:
+        if not isinstance(total_price, (int, float)) or total_price < 0:
             continue
 
         total_items += quantity
-        total_revenue += quantity * price
+        total_revenue += total_price
 
     return JsonResponse({
         "message": "Reporte de ventas totales generado correctamente.",
@@ -81,7 +81,7 @@ def sales_by_product_report(request):
     for sale in sales:
         product_id = sale.get('productId')
         quantity = sale.get('quantity', 0)
-        price = sale.get('price', 0)
+        total_price = sale.get('totalPrice')
 
         if product_id is None:
             continue
@@ -89,7 +89,7 @@ def sales_by_product_report(request):
         if not isinstance(quantity, int) or quantity <= 0:
             continue
 
-        if not isinstance(price, (int, float)) or price < 0:
+        if not isinstance(total_price, (int, float)) or total_price < 0:
             continue
 
         if product_id not in product_summary:
@@ -100,7 +100,7 @@ def sales_by_product_report(request):
             }
 
         product_summary[product_id]["totalItemsSold"] += quantity
-        product_summary[product_id]["totalRevenue"] += quantity * price
+        product_summary[product_id]["totalRevenue"] += total_price
 
     result = list(product_summary.values())
 
@@ -136,7 +136,7 @@ def sales_by_user_report(request):
     for sale in sales:
         user_id = sale.get('userId')
         quantity = sale.get('quantity', 0)
-        price = sale.get('price', 0)
+        total_price = sale.get('totalPrice')
 
         if user_id is None:
             continue
@@ -144,7 +144,7 @@ def sales_by_user_report(request):
         if not isinstance(quantity, int) or quantity <= 0:
             continue
 
-        if not isinstance(price, (int, float)) or price < 0:
+        if not isinstance(total_price, (int, float)) or total_price < 0:
             continue
 
         if user_id not in user_summary:
@@ -155,7 +155,7 @@ def sales_by_user_report(request):
             }
 
         user_summary[user_id]["totalItemsPurchased"] += quantity
-        user_summary[user_id]["totalSpent"] += quantity * price
+        user_summary[user_id]["totalSpent"] += total_price
 
     result = list(user_summary.values())
 

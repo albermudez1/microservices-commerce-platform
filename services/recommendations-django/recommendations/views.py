@@ -4,6 +4,12 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+def parse_positive_int(value):
+    try:
+        parsed = int(value)
+        return parsed if parsed > 0 else None
+    except (TypeError, ValueError):
+        return None
 
 @csrf_exempt
 def health_check(request):
@@ -37,7 +43,7 @@ def top_selling_recommendations(request):
     sales_count = {}
 
     for sale in sales:
-        product_id = sale.get('productId')
+        product_id = parse_positive_int(sale.get('productId'))
         quantity = sale.get('quantity', 0)
 
         if product_id is None:
@@ -54,7 +60,7 @@ def top_selling_recommendations(request):
     available_products = []
 
     for product in products:
-        product_id = product.get('id')
+        product_id = parse_positive_int(product.get('id'))
         stock = product.get('stock', 0)
 
         if product_id is None:
@@ -115,7 +121,7 @@ def user_recommendations(request):
 
     for sale in sales:
         sale_user_id = sale.get('userId')
-        product_id = sale.get('productId')
+        product_id = parse_positive_int(sale.get('productId'))
 
         if sale_user_id == user_id and product_id is not None:
             purchased_product_ids.add(product_id)
@@ -123,7 +129,7 @@ def user_recommendations(request):
     recommended_products = []
 
     for product in products:
-        product_id = product.get('id')
+        product_id = parse_positive_int(product.get('id'))
         stock = product.get('stock', 0)
 
         if product_id is None:
@@ -179,7 +185,7 @@ def price_max_recommendations(request):
     sales_count = {}
 
     for sale in sales:
-        product_id = sale.get('productId')
+        product_id = parse_positive_int(sale.get('productId'))
         quantity = sale.get('quantity', 0)
 
         if product_id is None:
@@ -196,7 +202,7 @@ def price_max_recommendations(request):
     filtered_products = []
 
     for product in products:
-        product_id = product.get('id')
+        product_id = parse_positive_int(product.get('id'))
         stock = product.get('stock', 0)
         price = product.get('price')
 
