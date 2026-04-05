@@ -6,6 +6,7 @@ use App\Http\Controllers\Services\ProductGatewayController;
 use App\Http\Controllers\Services\SalesGatewayController;
 use App\Http\Controllers\Services\RecommendationGatewayController;
 use App\Http\Controllers\Services\ReportGatewayController;
+use App\Http\Controllers\Services\StoreGatewayController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -43,5 +44,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/reports/total-sales', [ReportGatewayController::class, 'totalSales']);
     Route::get('/reports/sales-by-product', [ReportGatewayController::class, 'salesByProduct']);
     Route::get('/reports/sales-by-user', [ReportGatewayController::class, 'salesByUser']);
+
+    # Store routes
+    Route::get('/stores', [StoreGatewayController::class, 'index']);
+    Route::get('/stores/{id}', [StoreGatewayController::class, 'show']);
+    Route::post('/stores', [StoreGatewayController::class, 'store']);
+    Route::get('/stores/city/{city}', [StoreGatewayController::class, 'byCity']);
+    Route::get('/stores/product/{productId}', [StoreGatewayController::class, 'byProduct']);
 
 });
