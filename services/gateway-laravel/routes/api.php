@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Services\ProductGatewayController;
 use App\Http\Controllers\Services\SalesGatewayController;
 use App\Http\Controllers\Services\RecommendationGatewayController;
+use App\Http\Controllers\Services\ReportGatewayController;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -37,5 +38,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/recommendations/top-selling', [RecommendationGatewayController::class, 'topSelling']);
     Route::get('/recommendations/user', [RecommendationGatewayController::class, 'userRecommendations']);
     Route::get('/recommendations/price-max', [RecommendationGatewayController::class, 'priceMax']);
+
+    # Report routes
+    Route::get('/reports/total-sales', [ReportGatewayController::class, 'totalSales']);
+    Route::get('/reports/sales-by-product', [ReportGatewayController::class, 'salesByProduct']);
+    Route::get('/reports/sales-by-user', [ReportGatewayController::class, 'salesByUser']);
 
 });
