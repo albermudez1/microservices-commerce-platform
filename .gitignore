@@ -38,3 +38,12 @@ services/coverage-flask/*.pyc
 
 # Node modules
 **/node_modules/
+
+# Testing
+testing/venv/
+testing/__pycache__/
+testing/*.pyc
+testing/.env
+testing/test_data.json
+testing/*.csv
+testing/*.html
