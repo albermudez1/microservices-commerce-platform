@@ -1,47 +1,132 @@
-from locust import HttpUser, task, between
+import json
+import os
+from pathlib import Path
+from urllib.parse import urlparse
+
+from dotenv import load_dotenv
+from locust import HttpUser, between, task
+
+load_dotenv()
+
+API_BASE_URL = os.getenv("GATEWAY_BASE_URL", "http://127.0.0.1:8000/api").rstrip("/")
+
+parsed_url = urlparse(API_BASE_URL)
+HOST = f"{parsed_url.scheme}://{parsed_url.netloc}"
+API_PREFIX = parsed_url.path.rstrip("/")
+
+TEST_DATA_PATH = Path(__file__).parent / "test_data.json"
+
+if not TEST_DATA_PATH.exists():
+    raise FileNotFoundError(
+        "No se encontró testing/test_data.json. "
+        "Ejecuta primero setup_test_data.py."
+    )
+
+with open(TEST_DATA_PATH, "r", encoding="utf-8") as file:
+    TEST_DATA = json.load(file)
+
+TOKEN = TEST_DATA.get("token")
+PRODUCT_ID = TEST_DATA.get("product_id")
+USER_ID = TEST_DATA.get("user_id")
+
+if not TOKEN:
+    raise ValueError("No se encontró 'token' en test_data.json.")
+
+if not PRODUCT_ID:
+    raise ValueError("No se encontró 'product_id' en test_data.json.")
+
+if not USER_ID:
+    raise ValueError("No se encontró 'user_id' en test_data.json.")
 
 
-class SalesProcessUser(HttpUser):
-    wait_time = between(1, 3)
+class CommercePlatformUser(HttpUser):
+    host = HOST
+    wait_time = between(1, 2)
 
     def on_start(self):
-        login_payload = {
-            "email": "test@example.com",
-            "password": "password123"
+        self.headers = {
+            "Authorization": f"Bearer {TOKEN}",
+            "Accept": "application/json",
         }
+        self.product_id = PRODUCT_ID
+        self.user_id = USER_ID
 
-        response = self.client.post(
-            "/api/login",
-            json=login_payload,
-            headers={"Accept": "application/json"},
-            name="Login"
+    @task(1)
+    def get_products(self):
+        self.client.get(
+            f"{API_PREFIX}/products",
+            headers=self.headers,
+            name="/api/products",
         )
 
-        if response.status_code == 200:
-            data = response.json()
-            self.token = data.get("token")
-        else:
-            self.token = None
+    @task(1)
+    def get_product_by_id(self):
+        self.client.get(
+            f"{API_PREFIX}/products/{self.product_id}",
+            headers=self.headers,
+            name="/api/products/{product_id}",
+        )
 
-    @task
-    def process_sale(self):
-        if not self.token:
-            return
+    @task(1)
+    def get_product_stock(self):
+        self.client.get(
+            f"{API_PREFIX}/products/{self.product_id}/stock",
+            headers=self.headers,
+            name="/api/products/{product_id}/stock",
+        )
 
-        headers = {
-            "Authorization": f"Bearer {self.token}",
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
+    @task(1)
+    def get_sales(self):
+        self.client.get(
+            f"{API_PREFIX}/sales",
+            headers=self.headers,
+            name="/api/sales",
+        )
 
-        payload = {
-            "productId": 1,
-            "quantity": 1
-        }
+    @task(1)
+    def get_sales_by_user(self):
+        self.client.get(
+            f"{API_PREFIX}/sales/user/{self.user_id}",
+            headers=self.headers,
+            name="/api/sales/user/{user_id}",
+        )
 
-        self.client.post(
-            "/api/sales/process",
-            json=payload,
-            headers=headers,
-            name="Process Sale"
+    @task(1)
+    def get_top_selling_recommendations(self):
+        self.client.get(
+            f"{API_PREFIX}/recommendations/top-selling",
+            headers=self.headers,
+            name="/api/recommendations/top-selling",
+        )
+
+    @task(1)
+    def get_user_recommendations(self):
+        self.client.get(
+            f"{API_PREFIX}/recommendations/user",
+            headers=self.headers,
+            name="/api/recommendations/user",
+        )
+
+    @task(1)
+    def get_total_sales_report(self):
+        self.client.get(
+            f"{API_PREFIX}/reports/total-sales",
+            headers=self.headers,
+            name="/api/reports/total-sales",
+        )
+
+    @task(1)
+    def get_sales_by_product_report(self):
+        self.client.get(
+            f"{API_PREFIX}/reports/sales-by-product",
+            headers=self.headers,
+            name="/api/reports/sales-by-product",
+        )
+
+    @task(1)
+    def get_stores(self):
+        self.client.get(
+            f"{API_PREFIX}/stores",
+            headers=self.headers,
+            name="/api/stores",
         )
