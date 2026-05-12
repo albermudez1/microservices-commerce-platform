@@ -8,8 +8,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# para ejecutar en local
+#BASE_URL = os.getenv("GATEWAY_BASE_URL", "http://127.0.0.1:8000/api").rstrip("/")
 
-BASE_URL = os.getenv("GATEWAY_BASE_URL", "http://127.0.0.1:8000/api").rstrip("/")
+# para ejecutar con docker
+BASE_URL = "http://gateway:8000/api"
 
 TEST_USER_NAME = os.getenv("TEST_USER_NAME", "Usuario Testing")
 TEST_USER_EMAIL = os.getenv("TEST_USER_EMAIL", "testing@example.com")
